@@ -4,7 +4,6 @@ public class AddReplyRequestData {
 	String text;
 	String password;
 	String moimId;
-	
 
 	public String getMoimId() {
 		return moimId;

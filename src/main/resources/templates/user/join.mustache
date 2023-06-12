@@ -4,6 +4,9 @@
 	<span class="fs-6">어플리케이션 사용을 위한 사용자 등록을 시작합니다.</span>
 </div>
 <form class="my-2 p-2" method="post" action="/user/join">
+	{{#token }}
+		<input type="hidden" value="{{token}}" name="_csrf"/>
+	{{/token }}
 
 	{{#error }}
 	<div class="alert alert-warning alert-dismissible" role="alert">
@@ -20,7 +23,7 @@
 	</div>
 	<div class="mb-1">
 		<label class="form-label">사용할 비밀번호(*)</label> <input type="password"
-			class="form-control" name="pass" />
+			class="form-control" name="password" />
 		<div class="form-text">비밀번호는 4글자 이상으로 설정하세요.</div>
 	</div>
 	<div class="mb-3">

@@ -11,20 +11,12 @@
 	{{/error }}
 	<form class="my-2 p-2" method="post" action="/private/modify">
 		<div class="mb-1 text-center">
-			{{#savedDetail.avatar }}
-			<img src="{{url}}" style="max-width: 50%"
-				class="rounded img-thumbnail" alt="...">
-			{{/savedDetail.avatar }}
-			{{^savedDetail.avatar }}
-			<img src="" style="max-width: 50%"
-				class="rounded img-thumbnail" alt="...">
-			{{/savedDetail.avatar }} 
+			{{#avatars}}
+				<input type="radio" name="avatar.id" value="{{#savedDetail.avatarId}}{{.}}{{/savedDetail.avatarId}}"/><img src="{{url}}" style="width: 120px"
+				class="rounded img-thumbnail" alt="..."/>
+			{{/avatars}}
 		</div>
-		<div class="mb-1 text-secondary">
-			<label class="form-label ">아바타</label> <input type="text"
-				class="form-control" name="avatar.id"
-				value="{{#savedDetail.avatarId}}{{.}}{{/savedDetail.avatarId}}" />
-		</div>
+		
 		<div class="mb-1 text-secondary">
 			<label class="form-label ">자기소개</label>
 			<textarea class="form-control" name="description">{{#savedDetail.description}}{{.}}{{/savedDetail.description}}</textarea>

@@ -16,10 +16,12 @@ public class UserResponseData {
 
 	public UserResponseData(User user) {
 		this.id = user.getId();
+		
 		SimpleDateFormat dayFmt = new SimpleDateFormat("yyyy-MM-dd");
 		this.joinDay = dayFmt.format(user.getJoinDate());
 		long diff = System.currentTimeMillis() - user.getJoinDate().getTime();
 		this.joinTime = diff / (1000L * 60 * 60 * 24) + "일 전";
+		
 		this.nick = user.getNick();
 		if (user.getUserDetail() != null) {
 			description = user.getUserDetail().getDescription();

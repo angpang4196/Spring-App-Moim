@@ -2,18 +2,21 @@ package org.edupoll.controller;
 
 import org.edupoll.model.dto.request.AddReplyRequestData;
 import org.edupoll.model.entity.Moim;
+import org.edupoll.security.support.Account;
 import org.edupoll.service.AttendanceService;
 import org.edupoll.service.MoimService;
 import org.edupoll.service.ReplyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MoimController {
@@ -41,23 +44,23 @@ public class MoimController {
 	}
 
 	@PostMapping("/moims/create")
-	public String moimCreateHandle(Moim moim, @SessionAttribute String logonId) {
-		String createdId = moimService.createNewMoim(moim, logonId);
+	public String moimCreateHandle(Moim moim, @AuthenticationPrincipal Account account) {
+		String createdId = moimService.createNewMoim(moim, account.getUsername());
 		logger.debug("moimCreateHandle result id = {}", createdId);
 		return "redirect:/moims/view?id=" + createdId;
 	}
 
 	// 특정 모임 정보 보기용 EndPoint + (리플정보도 같이)
 	@GetMapping("/moims/view")
-	public String showMoimDetail(String id, @RequestParam(defaultValue = "1") int p, @SessionAttribute(required = false) String logonId,
-			Model model) {
+	public String showMoimDetail(String id, @RequestParam(defaultValue = "1") int p, HttpSession session,
+			Model model, @AuthenticationPrincipal Account account) {
 		model.addAttribute("moim", moimService.getSpecificMoimById(id));
 		// model.addAttribute("replys", replyService.getReplysByMoimId(id, p));
 		
-		model.addAttribute("isLogon", logonId != null);
+		model.addAttribute("isLogon", account != null);
 		
-		if(logonId != null) {
-			model.addAttribute("isJoined", attendanceService.isExistsAttendance(logonId, id));
+		if(account != null) {
+			model.addAttribute("isJoined", attendanceService.isExistsAttendance(account.getUsername(), id));
 		}
 			
 		return "moims/view";

@@ -18,10 +18,10 @@ public class TestController {
 	//
 	@Autowired
 	ObjectMapper objectMapper;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@GetMapping("/test-a")
 	@ResponseBody
 	public String testAHandle() throws JsonProcessingException {
@@ -42,9 +42,8 @@ public class TestController {
 	@GetMapping("/test-c")
 	@ResponseBody
 	public TestResponseData testCHandle() {
-		TestResponseData trd =
-				new TestResponseData(2,	"정상처리되었다", new String[] { "루피", "조로" } );
-		
+		TestResponseData trd = new TestResponseData(2, "정상처리되었다", new String[] { "루피", "조로" });
+
 		return trd;
 	}
 
@@ -54,26 +53,5 @@ public class TestController {
 		User found = userRepository.findById("saito").get();
 		return found;
 	}
-	
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

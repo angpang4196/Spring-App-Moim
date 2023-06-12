@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.edupoll.model.dto.request.LoginRequestData;
+import org.edupoll.model.dto.request.UserDTO;
 import org.edupoll.model.entity.Attendance;
+import org.edupoll.model.entity.Avatar;
 import org.edupoll.model.entity.Moim;
 import org.edupoll.model.entity.User;
 import org.edupoll.model.entity.UserDetail;
 import org.edupoll.repository.AttendanceRepository;
+import org.edupoll.repository.AvatarRepository;
 import org.edupoll.repository.MoimRepository;
 import org.edupoll.repository.ReplyRepository;
 import org.edupoll.repository.UserDetailRepository;
@@ -34,6 +37,9 @@ public class UserService {
 
 	@Autowired
 	MoimRepository moimRepository;
+	
+	@Autowired
+	AvatarRepository avatarRepository;
 
 	@Transactional
 	public boolean deleteSpecificUser(String userId) {
@@ -68,9 +74,9 @@ public class UserService {
 			return false;
 		// 2. UserDetail 저장하고
 		User foundUser = userRepository.findById(userId).get();
-		if (foundUser.getUserDetail() != null)
+		if (foundUser.getUserDetail() != null) {
 			detail.setIdx(foundUser.getUserDetail().getIdx());
-
+		}
 		UserDetail saved = userDetailRepository.save(detail);
 		// 3. 특정 유저의 detail_idx 에 방금 저장하며 부여받은 id 값을 설정해서 update
 		foundUser.setUserDetail(saved);
@@ -79,13 +85,18 @@ public class UserService {
 	}
 
 	// 회원 가입을 처리할 서비스 메서드
-	public boolean createNewUser(User user) {
-		if (userRepository.findById(user.getId()).isEmpty()) {
-			// user.setJoinDate(new Date());
+	public boolean createNewUser(UserDTO userDTO) {
+		String id = userDTO.getId();
+		if (userRepository.findById(id).isPresent()) {
+			return false;
+		} else {
+			UserDTO u = new UserDTO(id, userDTO.getPassword(), userDTO.getNick());
+			User user = new User(id, u.getPassword(), u.getNick());
 			userRepository.save(user);
+			
 			return true;
 		}
-		return false;
+
 	}
 
 	// 로그인 처리를 하기 위해 사용할 서비스 메서드
@@ -121,5 +132,10 @@ public class UserService {
 		List<Attendance> attendances = attendanceRepository.findByUserId(found.getId());
 
 		return attendances;
+	}
+
+	public List<Avatar> loadAvatars() {
+		
+		return avatarRepository.findAll();
 	}
 }

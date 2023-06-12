@@ -23,6 +23,7 @@ public class User {
 	String pass;
 	String nick;
 	Date joinDate;
+	String authority;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userDetailIdx") // User Entity 의 필드
@@ -40,6 +41,16 @@ public class User {
 
 	@OneToMany(mappedBy = "target", fetch = FetchType.LAZY)
 	List<Follow> followFrom;
+	
+	public User() {
+	}
+
+	public User (String id, String password, String nick) {
+		this.id = id;
+		this.pass = password;
+		this.nick = nick;
+		this.authority = "ROLE_NORMAL";
+	}
 
 	public List<Follow> getFollowTo() {
 		return followTo;
@@ -114,6 +125,14 @@ public class User {
 		this.userDetail = userDetail;
 	}
 
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
 	// 객체 insert 전 할 작업
 	@PrePersist
 	public void doPrePersist() {
@@ -123,9 +142,11 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", pass=" + pass + ", nick=" + nick + ", joinDate=" + joinDate + ", userDetail="
-				+ userDetail + "]";
+		return "User [id=" + id + ", pass=" + pass + ", nick=" + nick + ", joinDate=" + joinDate + ", authority="
+				+ authority + ", userDetail=" + userDetail + ", moims=" + moims + ", attendMoims=" + attendMoims
+				+ ", followTo=" + followTo + ", followFrom=" + followFrom + "]";
 	}
+
 	// toString
 }
 
