@@ -77,6 +77,7 @@ public class UserService {
 		if (foundUser.getUserDetail() != null) {
 			detail.setIdx(foundUser.getUserDetail().getIdx());
 		}
+		System.out.println("아바타 정보 : " + detail.getAvatar());
 		UserDetail saved = userDetailRepository.save(detail);
 		// 3. 특정 유저의 detail_idx 에 방금 저장하며 부여받은 id 값을 설정해서 update
 		foundUser.setUserDetail(saved);
